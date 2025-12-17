@@ -9,7 +9,7 @@ import ErrorMessage from '../components/common/ErrorMessage';
 
 const Orders = () => {
   const navigate = useNavigate();
-  const { addItem } = useCart();
+  const { addItem, clearCart } = useCart();
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showReceipt, setShowReceipt] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -37,18 +37,24 @@ const Orders = () => {
 
   const ordersList = orders;
 
-  const handleReorder = (order) => {
-    // Add all items from order to cart
-    order.items.forEach(item => {
-      addItem({
-        id: item.id || Math.random(),
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        image: order.image // Use order image as fallback
+  const handleReorder = async (order) => {
+    // Clear cart first
+    await clearCart();
+    
+    // Add all items from order to cart with a small delay
+    setTimeout(() => {
+      order.items.forEach(item => {
+        addItem({
+          id: item.id || Math.random(),
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          restaurant_id: order.restaurantId,
+          image: order.image
+        });
       });
-    });
-    navigate('/cart');
+      navigate('/cart');
+    }, 100);
   };
 
   const handleViewReceipt = (order) => {
@@ -115,18 +121,21 @@ const Orders = () => {
               key={order._id}
               order={{
                 id: order._id,
-                orderNumber: order.order_number,
-                restaurant: order.restaurant_id?.name || 'Unknown Restaurant',
-                status: order.order_status,
-                total: order.total_cents / 100,
+                orderNumber: order.orderNumber,
+                restaurant: order.restaurantId?.name || 'Unknown Restaurant',
+                restaurantId: order.restaurantId?._id,
+                status: order.orderStatus,
+                total: (order.totalCents || 0) / 100,
                 date: new Date(order.createdAt).toLocaleDateString(),
                 items: order.items?.map(item => ({
-                  id: item.menu_item_id,
-                  name: item.menu_item_id?.name || 'Unknown Item',
-                  quantity: item.quantity,
-                  price: item.price_cents / 100
+                  id: item.menuItemId,
+                  name: item.menuItemId?.name || 'Unknown Item',
+                  quantity: item.quantity || 0,
+                  price: (item.priceCents || 0) / 100
                 })) || [],
-                image: order.restaurant_id?.image || '/placeholder-restaurant.jpg'
+                deliveryFee: (order.deliveryFeeCents || 0) / 100,
+                tax: (order.taxCents || 0) / 100,
+                image: order.restaurantId?.image || '/placeholder-restaurant.jpg'
               }}
               onReorder={handleReorder}
               onViewReceipt={handleViewReceipt}

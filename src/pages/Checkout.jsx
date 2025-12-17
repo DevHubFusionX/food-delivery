@@ -22,7 +22,7 @@ const Checkout = () => {
     state: 'NY',
     zipCode: '10001'
   });
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
   const [deliveryTime, setDeliveryTime] = useState('asap');
   const [promo, setPromo] = useState(null);
   const [instructions, setInstructions] = useState('');
@@ -45,8 +45,9 @@ const Checkout = () => {
       setError(null);
       
       // Get restaurant_id from first cart item
-      const restaurant_id = cartItems[0]?.restaurant_id;
+      const restaurant_id = cartItems[0]?.restaurant_id || cartItems[0]?.restaurantId;
       if (!restaurant_id) {
+        console.log('Cart items:', cartItems);
         throw new Error('Restaurant information missing');
       }
       
@@ -58,12 +59,13 @@ const Checkout = () => {
           quantity: item.quantity,
           notes: item.notes || ''
         })),
-        payment_method: paymentMethod,
+        payment_method: 'cash',
         scheduled_time: deliveryTime === 'asap' ? null : deliveryTime,
         coupon_code: promo?.code || null
       };
       
       const response = await ApiService.createOrder(orderData);
+      
       clearCart();
       alert('Order placed successfully! 🎉');
       navigate('/orders');

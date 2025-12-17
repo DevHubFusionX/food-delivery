@@ -156,8 +156,8 @@ class ApiService {
   }
 
   // Payments
-  createPaymentIntent(amount_cents, order_id) {
-    return this.request('/payments/stripe-intent', {
+  createPaystackTransaction(amount_cents, order_id) {
+    return this.request('/payments/paystack-init', {
       method: 'POST',
       body: JSON.stringify({ amount_cents, order_id }),
     });

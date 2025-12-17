@@ -27,7 +27,7 @@ const OrderCard = ({ order, onReorder, onViewReceipt }) => {
           </div>
         </div>
         <div className="text-right">
-          <div className="font-semibold text-gray-900">${order.total.toFixed(2)}</div>
+          <div className="font-semibold text-gray-900">${(order.total || 0).toFixed(2)}</div>
           <div className={`text-sm px-2 py-1 rounded-full ${
             order.status === 'Delivered' 
               ? 'bg-green-100 text-green-700' 
@@ -68,7 +68,7 @@ const OrderCard = ({ order, onReorder, onViewReceipt }) => {
             {order.items.map((item, index) => (
               <div key={index} className="flex justify-between text-sm">
                 <span>{item.quantity}x {item.name}</span>
-                <span>${(item.price * item.quantity).toFixed(2)}</span>
+                <span>${((item.price || 0) * (item.quantity || 0)).toFixed(2)}</span>
               </div>
             ))}
           </div>

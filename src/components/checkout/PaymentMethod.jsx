@@ -4,10 +4,8 @@ const PaymentMethod = ({ selectedMethod, onMethodChange }) => {
   const [cardDetails, setCardDetails] = useState({});
 
   const paymentMethods = [
-    { id: 'card', name: 'Credit/Debit Card', icon: '💳' },
-    { id: 'paypal', name: 'PayPal', icon: '🅿️' },
-    { id: 'apple', name: 'Apple Pay', icon: '🍎' },
-    { id: 'cash', name: 'Cash on Delivery', icon: '💵' }
+    { id: 'cash', name: 'Cash on Delivery', icon: '💵' },
+    { id: 'paystack', name: 'Paystack (Card Payment)', icon: '💳' }
   ];
 
   return (
@@ -38,25 +36,14 @@ const PaymentMethod = ({ selectedMethod, onMethodChange }) => {
         ))}
       </div>
 
-      {selectedMethod === 'card' && (
+      {selectedMethod === 'paystack' && (
         <div className="border-t pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              placeholder="Card Number"
-              className="col-span-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <input
-              placeholder="MM/YY"
-              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <input
-              placeholder="CVV"
-              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <input
-              placeholder="Cardholder Name"
-              className="col-span-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
+            <div className="col-span-2 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-green-700">
+                💳 You will be redirected to Paystack to complete your payment securely.
+              </p>
+            </div>
           </div>
         </div>
       )}

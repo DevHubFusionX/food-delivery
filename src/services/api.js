@@ -1,5 +1,7 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://food-delivery-backend-c8yx.onrender.com/api/v1';
 
+console.log('API Base URL:', API_BASE_URL);
+
 class ApiService {
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;

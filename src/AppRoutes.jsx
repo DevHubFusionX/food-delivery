@@ -14,25 +14,26 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminMenu from './pages/admin/AdminMenu';
 import AdminRiders from './pages/admin/AdminRiders';
 import AdminRestaurant from './pages/admin/AdminRestaurant';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/restaurants" element={<Restaurants />} />
       <Route path="/restaurant/:id" element={<RestaurantDetail />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route path="/orders" element={<Orders />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+      <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/menu" element={<AdminMenu />} />
-      <Route path="/admin/riders" element={<AdminRiders />} />
-      <Route path="/admin/restaurant" element={<AdminRestaurant />} />
+      <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/menu" element={<ProtectedRoute><AdminMenu /></ProtectedRoute>} />
+      <Route path="/admin/riders" element={<ProtectedRoute><AdminRiders /></ProtectedRoute>} />
+      <Route path="/admin/restaurant" element={<ProtectedRoute><AdminRestaurant /></ProtectedRoute>} />
     </Routes>
   );
 };

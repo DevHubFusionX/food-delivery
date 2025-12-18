@@ -28,16 +28,23 @@ const MobileMenu = ({ onLoginClick, onSignupClick, isAuthenticated, user, onLogo
       {isOpen && (
         <div id="mobile-nav" className="absolute right-0 mt-3 w-56 origin-top-right rounded-xl border border-black/10 bg-white p-2 shadow-xl">
           <nav className="flex flex-col">
-            {links.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
+            {isAuthenticated ? (
+              // Authenticated user links
+              <>
+                <Link to="/dashboard" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Dashboard</Link>
+                <Link to="/restaurants" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Restaurants</Link>
+                <Link to="/orders" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Orders</Link>
+                <Link to="/profile" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Profile</Link>
+              </>
+            ) : (
+              // Non-authenticated user links
+              <>
+                <Link to="/" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Home</Link>
+                <Link to="/restaurants" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Restaurants</Link>
+                <Link to="/about" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>About</Link>
+                <Link to="/contact" className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-800 transition hover:bg-orange-50 hover:text-orange-700" onClick={() => setIsOpen(false)}>Contact</Link>
+              </>
+            )}
             <div className="my-2 h-px bg-gray-200" />
             {isAuthenticated ? (
               <>

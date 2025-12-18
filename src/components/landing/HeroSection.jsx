@@ -1,6 +1,24 @@
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useLoginHandler } from '../../App';
 import { appData } from '../../data/data';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { openLogin } = useLoginHandler();
+
+  const handleOrderNow = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      openLogin();
+    }
+  };
+
+  const handleBrowseMenu = () => {
+    navigate('/restaurants');
+  };
   return (
     <section className="relative isolate overflow-hidden bg-gradient-to-br from-orange-500 via-red-500 to-rose-500 text-white">
       {/* Decorative blobs */}
@@ -29,10 +47,16 @@ const HeroSection = () => {
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row md:items-start">
-              <button className="w-full sm:w-auto rounded-xl bg-white px-7 py-3 text-base font-semibold text-orange-600 shadow-sm transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80">
+              <button 
+                onClick={handleOrderNow}
+                className="w-full sm:w-auto rounded-xl bg-white px-7 py-3 text-base font-semibold text-orange-600 shadow-sm transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+              >
                 {appData.hero.ctaText}
               </button>
-              <button className="w-full sm:w-auto rounded-xl border border-white/40 px-7 py-3 text-base font-semibold text-white/90 backdrop-blur transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+              <button 
+                onClick={handleBrowseMenu}
+                className="w-full sm:w-auto rounded-xl border border-white/40 px-7 py-3 text-base font-semibold text-white/90 backdrop-blur transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+              >
                 Browse menu
               </button>
             </div>

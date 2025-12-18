@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
-const OrderSummary = ({ items, deliveryFee = 2.99, discount = 0 }) => {
+const OrderSummary = ({ items, deliveryFee = 2.99, discount = 0, onLoginRequired }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + deliveryFee + tax - discount;
@@ -42,10 +44,16 @@ const OrderSummary = ({ items, deliveryFee = 2.99, discount = 0 }) => {
       </div>
       
       <button 
-        onClick={() => navigate('/checkout')}
+        onClick={() => {
+          if (isAuthenticated) {
+            navigate('/checkout');
+          } else {
+            onLoginRequired?.();
+          }
+        }}
         className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium mt-6 hover:bg-orange-600 transition-colors"
       >
-        Proceed to Checkout
+        {isAuthenticated ? 'Proceed to Checkout' : 'Sign in to Checkout'}
       </button>
     </div>
   );

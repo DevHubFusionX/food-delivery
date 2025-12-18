@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useLoginHandler } from '../../App';
 import { appData } from '../../data/data';
 
 const categories = [
@@ -50,8 +53,11 @@ const SectionHeader = ({ title, subtitle, cta }) => (
   </div>
 );
 
-const CategoryCard = ({ name, image }) => (
-  <button className="group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm transition hover:shadow-lg">
+const CategoryCard = ({ name, image, onClick }) => (
+  <button 
+    onClick={onClick}
+    className="group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm transition hover:shadow-lg"
+  >
     <div className="aspect-[4/3] w-full overflow-hidden">
       <img
         src={image}
@@ -67,7 +73,7 @@ const CategoryCard = ({ name, image }) => (
   </button>
 );
 
-const PopularCard = ({ name, desc, price, image }) => (
+const PopularCard = ({ name, desc, price, image, onAddToCart, onQuickView }) => (
   <div className="group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm transition hover:shadow-lg">
     <div className="aspect-video w-full overflow-hidden">
       <img
@@ -88,10 +94,16 @@ const PopularCard = ({ name, desc, price, image }) => (
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between">
-        <button className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm font-semibold text-gray-800 shadow-sm transition hover:bg-gray-50">
+        <button 
+          onClick={onAddToCart}
+          className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm font-semibold text-gray-800 shadow-sm transition hover:bg-gray-50"
+        >
           Add to cart
         </button>
-        <button className="inline-flex items-center rounded-full bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-500">
+        <button 
+          onClick={onQuickView}
+          className="inline-flex items-center rounded-full bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-500"
+        >
           Quick view
         </button>
       </div>
@@ -100,6 +112,23 @@ const PopularCard = ({ name, desc, price, image }) => (
 );
 
 const FeaturedSection = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { openLogin } = useLoginHandler();
+
+  const handleAddToCart = () => {
+    if (isAuthenticated) {
+      // Add to cart logic would go here
+      console.log('Add to cart');
+    } else {
+      openLogin();
+    }
+  };
+
+  const handleViewAll = () => {
+    navigate('/restaurants');
+  };
+
   return (
     <section className="bg-gray-50">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
@@ -108,14 +137,17 @@ const FeaturedSection = () => {
           title="Explore categories"
           subtitle="Find exactly what you're craving. From indulgent comfort food to light and healthy options, we've got you covered."
           cta={
-            <button className="inline-flex items-center rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition hover:bg-gray-50">
+            <button 
+              onClick={handleViewAll}
+              className="inline-flex items-center rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition hover:bg-gray-50"
+            >
               View all
             </button>
           }
         />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
           {categories.map((cat) => (
-            <CategoryCard key={cat.name} {...cat} />
+            <CategoryCard key={cat.name} {...cat} onClick={handleViewAll} />
           ))}
         </div>
 
@@ -125,14 +157,22 @@ const FeaturedSection = () => {
             title="Popular right now"
             subtitle="Best-sellers your neighbors are loving today."
             cta={
-              <button className="inline-flex items-center rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-500">
+              <button 
+                onClick={handleViewAll}
+                className="inline-flex items-center rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-500"
+              >
                 See deals
               </button>
             }
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {popular.map((item) => (
-              <PopularCard key={item.name} {...item} />
+              <PopularCard 
+                key={item.name} 
+                {...item} 
+                onAddToCart={handleAddToCart}
+                onQuickView={handleViewAll}
+              />
             ))}
           </div>
         </div>

@@ -108,8 +108,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     ApiService.clearAuthData();
+    localStorage.removeItem('cart'); // Clear cart on logout
     setUser(null);
     setError(null);
+    // Trigger a page reload to ensure all state is cleared
+    window.location.reload();
   };
   
   const handleSessionExpired = () => {

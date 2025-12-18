@@ -1,16 +1,28 @@
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { useLoginHandler } from '../../App';
 
 const MenuItem = ({ item }) => {
   const { addItem } = useCart();
+  const { isAuthenticated } = useAuth();
+  const { openLogin } = useLoginHandler();
   const [quantity, setQuantity] = useState(0);
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      openLogin();
+      return;
+    }
     setQuantity(quantity + 1);
     addItem({ ...item, quantity: 1, restaurant_id: item.restaurant_id });
   };
 
   const handleQuantityChange = (newQuantity) => {
+    if (!isAuthenticated) {
+      openLogin();
+      return;
+    }
     const diff = newQuantity - quantity;
     setQuantity(newQuantity);
     if (diff > 0) {

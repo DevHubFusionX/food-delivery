@@ -10,7 +10,11 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
   const { isAuthenticated, user, logout } = useAuth();
 
   const handleGetApp = () => {
-    navigate('/dashboard');
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      onLoginClick();
+    }
   };
 
   const handleLogout = () => {
